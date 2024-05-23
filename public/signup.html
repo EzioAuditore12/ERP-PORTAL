@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign Up</title>
 </head>
 <body>
     <form class="Register-form">
-        <input type="text" placeholder="username" id="username"/>
-        <input type="password" placeholder="password" id="password"/>
+        <input type="text" placeholder="username" id="username" required/>
+        <input type="password" placeholder="password" id="password" required/>
         <button type="submit">Register</button>
     </form>
 
@@ -31,9 +31,15 @@
                 })
             });
 
-            // Handle the response
             const result = await response.json();
-            console.log(result);
+
+            if (result.success) {
+                // Redirect to profile.html upon successful registration
+                window.location.href = 'profile.html';
+            } else {
+                // Handle error case
+                console.error('Registration failed', result);
+            }
         });
     </script>
 </body>
