@@ -3,42 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Signup</title>
 </head>
 <body>
-    <form class="Register-form">
-        <input type="text" placeholder="username" id="username" required/>
-        <input type="password" placeholder="password" id="password" required/>
+    <form id="registerForm">
+        <input type="text" placeholder="Username" id="username">
+        <input type="password" placeholder="Password" id="password">
         <button type="submit">Register</button>
     </form>
 
     <script>
-        const form = document.getElementsByClassName('Register-form')[0];
-        const usernameField = document.getElementById('username');
-        const passwordField = document.getElementById('password');
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
 
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: usernameField.value,
-                    password: passwordField.value
-                })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Redirect to profile.html with the user ID as a query parameter
-                window.location.href = `profile.html?id=${result.id}`;
-            } else {
-                // Handle error case
-                console.error('Registration failed', result);
+                const data = await response.json();
+                if (data.success) {
+                    alert('Registration successful');
+                    // Redirect to profile page or do something else
+                } else {
+                    alert('Registration failed');
+                }
+            } catch (error) {
+                console.error('Error registering user:', error);
+                alert('An error occurred while registering');
             }
         });
     </script>
