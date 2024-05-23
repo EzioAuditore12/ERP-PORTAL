@@ -3,24 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>User Profile</title>
 </head>
 <body>
     <h1>User Profile</h1>
-    <p id="user-id"></p>
+    <form id="updateProfileForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <button type="submit">Update Profile</button>
+    </form>
 
     <script>
-        // Function to get query parameter by name
-        function getQueryParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
+        const updateProfileForm = document.getElementById('updateProfileForm');
 
-        // Get user ID from query parameters
-        const userId = getQueryParam('id');
+        updateProfileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(updateProfileForm);
+            const username = formData.get('username');
+            const password = formData.get('password');
 
-        // Display user ID in the profile page
-        document.getElementById('user-id').innerText = `User ID: ${userId}`;
+            try {
+                const response = await fetch('/update-profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Profile updated successfully');
+                    // Redirect or perform any other action after updating profile
+                } else {
+                    alert('Failed to update profile');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile');
+            }
+        });
     </script>
 </body>
 </html>
