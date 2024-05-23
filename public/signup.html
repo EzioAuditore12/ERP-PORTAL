@@ -6,15 +6,35 @@
     <title>Document</title>
 </head>
 <body>
-    <form class="Register-from">
+    <form class="Register-form">
         <input type="text" placeholder="username" id="username"/>
         <input type="password" placeholder="password" id="password"/>
         <button type="submit">Register</button>
     </form>
 
     <script>
-        const form=document.getElementsByClassName('Register-form')
-        
+        const form = document.getElementsByClassName('Register-form')[0];
+        const usernameField = document.getElementById('username');
+        const passwordField = document.getElementById('password');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: usernameField.value,
+                    password: passwordField.value
+                })
+            });
+
+            // Handle the response
+            const result = await response.json();
+            console.log(result);
+        });
     </script>
 </body>
 </html>
