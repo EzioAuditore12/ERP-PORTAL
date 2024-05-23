@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Profile</title>
 </head>
 <body>
-    <h1>Profile Page</h1>
+    <h1>User Profile</h1>
+    <p id="user-id"></p>
+
+    <script>
+        // Function to get query parameter by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Get user ID from query parameters
+        const userId = getQueryParam('id');
+
+        // Display user ID in the profile page
+        document.getElementById('user-id').innerText = `User ID: ${userId}`;
+    </script>
 </body>
 </html>

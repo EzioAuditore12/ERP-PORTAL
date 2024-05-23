@@ -34,8 +34,8 @@
             const result = await response.json();
 
             if (result.success) {
-                // Redirect to profile.html upon successful registration
-                window.location.href = 'profile.html';
+                // Redirect to profile.html with the user ID as a query parameter
+                window.location.href = `profile.html?id=${result.id}`;
             } else {
                 // Handle error case
                 console.error('Registration failed', result);
