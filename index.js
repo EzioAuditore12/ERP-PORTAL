@@ -39,7 +39,7 @@ app.post('/login', (req, res) => {
 
 // Signup endpoint
 app.post('/signup', (req, res) => {
-    const { username, password } = req.body;
+    const { username, password } = req.body;``
 
     pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err, results) => {
         if (err) {
