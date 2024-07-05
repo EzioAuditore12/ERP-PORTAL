@@ -7,81 +7,94 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        form {
-            margin: 50px auto;
-            width: 300px;
+
+        .login-container {
+            background: #fff;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
         }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-form input {
+            margin-bottom: 15px;
             padding: 10px;
-            margin-bottom: 10px;
+            font-size: 16px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 4px;
+        
         }
-        input[type="submit"] {
-            width: 100%;
+
+        .login-form button {
+            padding: 10px;
+            font-size: 16px;
             background-color: #007bff;
             color: #fff;
             border: none;
-            padding: 10px;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
         }
-        input[type="submit"]:hover {
+
+        .login-form button:hover {
             background-color: #0056b3;
-        }
-        .error {
-            color: red;
-            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <form id="loginForm">
+    <div class="login-container">
         <h2>Login</h2>
-        <div>
-            <input type="text" id="username" name="username" placeholder="Username">
-        </div>
-        <div>
-            <input type="password" id="password" name="password" placeholder="Password">
-        </div>
-        <div>
-            <input type="submit" value="Login">
-        </div>
-        <div class="error" id="errorMessage"></div>
-    </form>
+        <form id="loginForm" class="login-form">
+            <input type="text" placeholder="Username" id="username" required>
+            <input type="password" placeholder="Password" id="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
             event.preventDefault();
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-            // Send login request to the server
-            fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
                 if (data.success) {
-                    window.location.href = '/dashboard'; // Redirect to dashboard upon successful login
+                    window.location.href = '/profile2.html';
                 } else {
-                    document.getElementById('errorMessage').textContent = data.message;
+                    alert('Login failed: ' + data.message);
                 }
-            })
-            .catch(error => console.error('Error:', error));
+            } catch (error) {
+                console.error('Error logging in:', error);
+                alert('An error occurred while logging in');
+            }
         });
     </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Profile2</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,15 +56,22 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const username = localStorage.getItem('username');
-            if (username) {
-                const profileDiv = document.getElementById('profile');
-                profileDiv.innerHTML = `
-                    <p class="profile-greeting">Greetings, <span class="profile-username">${username}</span></p>
-                `;
-            } else {
-                document.getElementById('profile').innerText = 'No user logged in';
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/user');
+                const user = await response.json();
+                
+                if (user && user.username) {
+                    const profileDiv = document.getElementById('profile');
+                    profileDiv.innerHTML = `
+                        <p class="profile-greeting">Greetings, <span class="profile-username">${user.username}</span></p>
+                    `;
+                } else {
+                    document.getElementById('profile').innerText = 'User not found';
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                document.getElementById('profile').innerText = 'An error occurred';
             }
         });
     </script>
