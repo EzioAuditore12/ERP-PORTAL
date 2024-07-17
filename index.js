@@ -5,7 +5,7 @@ const session = require('express-session');
 const multer = require('multer');
 const crypto = require('crypto');
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const app = express();
 
 const pool = mysql.createPool({
