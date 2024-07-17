@@ -37,12 +37,12 @@
             margin-bottom: 20px;
         }
 
-        .profile-greeting {
-            font-size: 18px;
+        .profile-info {
+            font-size: 16px;
             margin-bottom: 10px;
         }
 
-        .profile-username {
+        .profile-info span {
             font-weight: bold;
             color: #007bff;
         }
@@ -51,8 +51,8 @@
 <body>
     <div class="profile-container">
         <h1>User Profile</h1>
-        <img src="Screenshot%202024-07-06%20015412.png" alt="Profile Photo" class="profile-photo">
-        <div id="profile" class="profile-greeting"></div>
+        <img id="profile-photo" src="" alt="Profile Photo" class="profile-photo">
+        <div id="profile" class="profile-info"></div>
     </div>
 
     <script>
@@ -60,11 +60,15 @@
             try {
                 const response = await fetch('/user');
                 const user = await response.json();
-                
+
                 if (user && user.username) {
+                    document.getElementById('profile-photo').src = `data:image/jpeg;base64,${user.profile_image}`;
                     const profileDiv = document.getElementById('profile');
                     profileDiv.innerHTML = `
-                        <p class="profile-greeting">Greetings, <span class="profile-username">${user.username}</span></p>
+                        <p>Greetings, <span>${user.username}</span></p>
+                        <p>Roll Number: <span>${user.roll_number}</span></p>
+                        <p>10th Percentage: <span>${user.percentage_10th}</span></p>
+                        <p>12th Percentage: <span>${user.percentage_12th}</span></p>
                     `;
                 } else {
                     document.getElementById('profile').innerText = 'User not found';

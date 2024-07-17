@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #e9ecef;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,56 +18,131 @@
         }
 
         .profile-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            width: 350px;
             text-align: center;
         }
 
-        .profile-container h1 {
+        .profile-container h2 {
             margin-bottom: 20px;
-            color: #333;
-        }
-
-        .profile-photo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 20px;
-        }
-
-        .profile-greeting {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .profile-username {
-            font-weight: bold;
             color: #007bff;
+        }
+
+        .profile-image-row {
+            background-color: #28a745;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .profile-image {
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-image img {
+            width: 150px; /* Increased size */
+            height: 150px; /* Increased size */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffffff; /* Adjusted border size */
+        }
+
+        .profile-info {
+            text-align: left;
+        }
+
+        .profile-info p {
+            border-bottom: 1px solid #dee2e6;
+            padding: 12px 0; /* Increased padding */
+            margin: 0;
+        }
+
+        .profile-info span {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .logout-button {
+            padding: 12px;
+            font-size: 18px;
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .logout-button:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
 <body>
     <div class="profile-container">
-        <h1>User Profile</h1>
-        <img src="Screenshot%202024-07-06%20015412.png" alt="Profile Photo" class="profile-photo">
-        <div id="profile" class="profile-greeting"></div>
+        <h2>User Profile</h2>
+        <div class="profile-image-row">
+            <div class="profile-image">
+                <img id="profileImage" src="" alt="Profile Image">
+            </div>
+        </div>
+        <div class="profile-info">
+            <p><span>Username:</span> <span id="username"></span></p>
+            <p><span>Roll Number:</span> <span id="rollNumber"></span></p>
+            <p><span>10th Percentage:</span> <span id="percentage10th"></span></p>
+            <p><span>12th Percentage:</span> <span id="percentage12th"></span></p>
+        </div>
+        <button class="logout-button" onclick="logout()">Logout</button>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const username = localStorage.getItem('username');
-            if (username) {
-                const profileDiv = document.getElementById('profile');
-                profileDiv.innerHTML = `
-                    <p class="profile-greeting">Greetings, <span class="profile-username">${username}</span></p>
-                `;
-            } else {
-                document.getElementById('profile').innerText = 'No user logged in';
+        async function fetchUserData() {
+            try {
+                const response = await fetch('/user');
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('username').textContent = data.username;
+                    document.getElementById('rollNumber').textContent = data.roll_number;
+                    document.getElementById('percentage10th').textContent = data.percentage_10th;
+                    document.getElementById('percentage12th').textContent = data.percentage_12th;
+
+                    if (data.profile_image) {
+                        document.getElementById('profileImage').src = `data:image/png;base64,${data.profile_image}`;
+                    } else {
+                        document.getElementById('profileImage').src = '/default-profile.jpg'; // Placeholder image if no profile image
+                    }
+                } else {
+                    alert('Failed to fetch user data');
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                alert('An error occurred while fetching user data');
             }
-        });
+        }
+
+        // Function to logout user
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url; 
+                    } else {
+                        alert('Logout failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error logging out:', error);
+                    alert('An error occurred while logging out');
+                });
+        }
+
+        // Fetch user data on page load
+        fetchUserData();
     </script>
 </body>
 </html>

@@ -30,70 +30,102 @@
             color: #333;
         }
 
-        .signup-form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .signup-form input {
+        .form-group {
             margin-bottom: 15px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            text-align: left;
         }
 
-        .signup-form button {
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="number"],
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="file"] {
+            padding: 3px;
+        }
+
+        .form-group button {
             padding: 10px;
             font-size: 16px;
-            background-color: #007bff;
+            background-color: #28a745;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 10px;
         }
 
-        .signup-form button:hover {
-            background-color: #0056b3;
+        .form-group button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
     <div class="signup-container">
         <h2>Signup</h2>
-        <form id="registerForm" class="signup-form">
-            <input type="text" placeholder="Username" id="username" required>
-            <input type="password" placeholder="Password" id="password" required>
-            <button type="submit">Register</button>
+        <form id="signupForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="roll_number">Roll Number</label>
+                <input type="number" id="roll_number" name="roll_number" required>
+            </div>
+            <div class="form-group">
+                <label for="percentage_10th">10th Percentage</label>
+                <input type="number" step="0.01" id="percentage_10th" name="percentage_10th" required>
+            </div>
+            <div class="form-group">
+                <label for="percentage_12th">12th Percentage</label>
+                <input type="number" step="0.01" id="percentage_12th" name="percentage_12th" required>
+            </div>
+            <div class="form-group">
+                <label for="profile_image">Profile Image</label>
+                <input type="file" id="profile_image" name="profile_image" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Signup</button>
+            </div>
         </form>
     </div>
 
     <script>
-        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+        document.getElementById('signupForm').addEventListener('submit', async function (event) {
             event.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+
+            const formData = new FormData(this);
 
             try {
                 const response = await fetch('/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
+                    body: formData
                 });
 
                 const data = await response.json();
+
                 if (data.success) {
-                    localStorage.setItem('username', username);
-                    window.location.href = '/profile.html';
+                    alert('Registration successful');
+                    window.location.href = '/profile.html'; // Redirect to profile page
                 } else {
-                    alert('Registration failed');
+                    alert('Registration failed: ' + data.message);
                 }
             } catch (error) {
                 console.error('Error registering user:', error);
-                alert('An error occurred while registering');
+                alert('An error occurred during registration');
             }
         });
     </script>
