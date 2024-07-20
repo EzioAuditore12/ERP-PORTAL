@@ -44,11 +44,11 @@
         }
 
         .profile-image img {
-            width: 150px; /* Increased size */
-            height: 150px; /* Increased size */
+            width: 150px; 
+            height: 150px; 
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #ffffff; /* Adjusted border size */
+            border: 3px solid #ffffff; 
         }
 
         .profile-info {
@@ -57,7 +57,7 @@
 
         .profile-info p {
             border-bottom: 1px solid #dee2e6;
-            padding: 12px 0; /* Increased padding */
+            padding: 12px 0;
             margin: 0;
         }
 
@@ -114,7 +114,7 @@
                     if (data.profile_image) {
                         document.getElementById('profileImage').src = `data:image/png;base64,${data.profile_image}`;
                     } else {
-                        document.getElementById('profileImage').src = '/default-profile.jpg'; // Placeholder image if no profile image
+                        document.getElementById('profileImage').src = '/default-profile.jpg'; 
                     }
                 } else {
                     alert('Failed to fetch user data');
@@ -125,7 +125,6 @@
             }
         }
 
-        // Function to logout user
         function logout() {
             fetch('/logout', { method: 'POST' })
                 .then(response => {
@@ -141,7 +140,7 @@
                 });
         }
 
-        // Fetch user data on page load
+      
         fetchUserData();
     </script>
 </body>
